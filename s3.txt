@@ -4,4 +4,7 @@ Create bucket options
 When you create new bucket it's access is restricted by default.  you have to edit its public access settings and remove restrictions. 
 If you don't do so and try to give public access to objects inside bucket, it won't work.
 
+buckets are universal name space
+successful upload of object returns http 200 code.
 
+once you enable versioning on bucket , you cannot disable it, you can suspend it though.
