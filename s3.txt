@@ -18,3 +18,12 @@ versioning must be enabled on source and destination buckets.
 regions must be unique
 files in existing bucket not replicated automatically, subsequent uploads do (exept any deletion may it be object or version).
 cannot replicate to multiple buckets
+
+s3 lifecycle and glacier notes
+can be used in conjunction with versionining.
+can be applied to current version and previous versions.
+following things can be done
+ - Transition to standard : Infrequent Access Storage class (30 days after the creation)
+ - Archive to glacier storage class (30 days after IA if relevant)
+ -Permanently delete
+ 
