@@ -8,3 +8,13 @@ buckets are universal name space
 successful upload of object returns http 200 code.
 
 once you enable versioning on bucket , you cannot disable it, you can suspend it though.
+
+Replication can be done only cross region , not in the same region.
+after replication configuration you have to copy already built in objects using cli commands
+afterwards uploading new versions automatically replicates, except deletion (for security reasons)
+
+exam tips
+versioning must be enabled on source and destination buckets.
+regions must be unique
+files in existing bucket not replicated automatically, subsequent uploads do (exept any deletion may it be object or version).
+cannot replicate to multiple buckets
