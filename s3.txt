@@ -27,3 +27,10 @@ following things can be done
  - Archive to glacier storage class (30 days after IA if relevant)
  -Permanently delete
  
+CDN
+====
+
+Edge locations are where contents are cached.
+Edge locations are not read only, you can write objects on them too.
+Objects are cached for the life of TTL(Time to leave)
+
