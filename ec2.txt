@@ -5,3 +5,10 @@ on demand : allows you to pay fixed rate per hour or per second with no committm
 Reserved : provides you with capacity reservation and offer a significant discount on the hourly charge for an instance.1-3 yrs tersm
 spot : enables you to bid whatever price you want for instance capacity, providing for even greater savings.
 dedicated hosts.
+
+
+Termination protection is turned off by default, you must turn it on if you want protection.
+on an EBS backed instance the default action is to delete when instance is termninated.
+EBS root volumes of your default AMI's canot be encrypted, you can use third party tool or api.
+  additional volumes can be encrypted.
+  
