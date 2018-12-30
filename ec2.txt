@@ -12,3 +12,10 @@ on an EBS backed instance the default action is to delete when instance is termn
 EBS root volumes of your default AMI's canot be encrypted, you can use third party tool or api.
   additional volumes can be encrypted.
   
+  security group rules are stateful, if you change any inbound rule, it immediately affects.
+  all inbound traffic is blocked by default
+  all outbound traffic is allowed by default
+  changes to security group takes effect immediately
+  you can have any number of ec2 instances within a security group.
+  
+  
