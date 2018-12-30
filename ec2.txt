@@ -17,5 +17,6 @@ EBS root volumes of your default AMI's canot be encrypted, you can use third par
   all outbound traffic is allowed by default
   changes to security group takes effect immediately
   you can have any number of ec2 instances within a security group.
-  
-  
+you cannot block individual ips through security group, instead use network access control list
+you can specify allow rules, not deny rules.
+
