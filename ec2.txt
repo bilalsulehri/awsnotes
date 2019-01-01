@@ -20,3 +20,7 @@ EBS root volumes of your default AMI's canot be encrypted, you can use third par
 you cannot block individual ips through security group, instead use network access control list
 you can specify allow rules, not deny rules.
 
+storage volumes
+==============
+
+ec2 instances and thier storage volume has to be in same availability zones, they cannot exist in different availability zones.
