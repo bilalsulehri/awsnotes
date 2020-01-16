@@ -1,0 +1,60 @@
+vpc
+ability to launch instances in subnet
+ec2 instances created in private subnet cannot be accessible through internet and it'll work like it's in our physical local private network
+
+if we need to communicate to internet from within vpc, we can attach internet gateway to subnet
+
+There is a default VPC, which is assigned to ec2 instance if we don't create it in our own vpc.
+that default vpc assigns it a public ip, which we cannot do in our own created vpc. The only way to do it is by contacting amazon web service and they are going to assign public ip to your ec2 instance.
+
+no default-vpc can only access resources through elastic ip address, vpn or gateway instance.
+
+
+if you delete default VPC, the only way to get it back is by contacting amazon web service.
+
+=====
+here is what i understand. In order to get access to resources, ec2 need to have elastic IP assigned to it ,and it should be created in a subnet, that has internet gateway attached to it.
+
+vpc peering
+===========
+
+if there are different vpcs created through different aws accounts, and their resources need to access each other, what we can do is peer those vpcs and recourses will access each other as if they are in the same vpc.
+
+another scenario is multiple vpc connect to central vpc, they interact with central vpc but cannot comminucate with each other.
+example of central vpc is having file sharing, printer or active directory.
+
+VPC Scenarios
+=============
+1. VPC with single subnet ( single tier application) (default subnet provided by aws)
+   good example is web server without any other services running on it, it needs to be accessed by internet, but the other resources it is accessing may not need public access.
+2. vpc with public and private subnets(layered applications)
+3. vpc with public and private subnets and hardware connected VPN( extended to on-premise)
+4. vpc with private subnet only and hardware vpn access. 
+ 
+ VPC limits
+ ==========
+ 5 vpc allowed per region, have to request for more.
+   same no. of internet gateway is allowed.
+ 1 internet gateway attached to a subnet at a time.
+ 1 NACL can be associated with 1 subnet 
+ 50 customer gateways per region.
+ 50 vpn per region.
+ 200 route tables per region.
+ 5 elastic ip address
+ 100 security groups.
+ 50 rules per security group.
+ 
+ 
+ IP ranges Amazon allows for subnets
+ 10.0.0.0 - 10.255.255.255 (10/8 prefix_)
+ 172.16.0.0 - 172.31.255.255 (172.16/12)
+ 192.168.0.0 - 192.168.255.255 (192.168/16)
+ 
+ When we create a vpc, a route table is automatically created and associated with it and it'll be a main route table, when we create a subnet , it's association is by default is created with the main route table. To manage things properly, we should create route table seperately for subnet, because for example, if we associate internet gateway to main route table, all the subnets under it will automatically have access to it, which we might not intend.
+ 
+ In order for private subnet to connect to internet, it needs a NAT instance (community instances)  or NAT gateway.
+ (see the difference between them in aws documentation)
+ bastion servers are not supported with NAT gateway, in this case use NAT instance.
+ 
+ in a private network, bastion server is kind of the front man, with public access, you first connect to bastion server (through ssh probably) and then from there you connect to other instances , which you could not have accessed directly.
+ 

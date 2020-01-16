@@ -1,0 +1,32 @@
+Kinesis
+Kinesis Streams stores data for 24 hrs, but you can increase it to 7 days.
+data is stored in shards inside kinesis stream.
+the consumer for data in shards will be ec2 instances
+once consumers have done calculations on data, it can be send to be stored in variety of database services.
+
+Kinesis consists of shards, which 
+
+A shard is a unit of throughput capacity. Each shard ingests up to 1MB/sec and 1000 records/sec, and emits up to 2MB/sec. To accommodate for higher or lower throughput, the number of shards can be modified after the Kinesis stream is created using the API
+
+A shard can process limited number of requests , so use more shards
+
+List stream command : aws kinesis list-streams
+
+aws kinesis describe-stream --stream-name test-stream 
+Above command describes things about stream, like no. of shards and their ids and other configs.
+
+aws kinesis put-record --stream-name test-stream --partition-key 4 --data  4  
+Above command is used to write data into stream
+
+
+In order to read data from stream, first you need to know the shard id, then  get the shard-iterator out of it, there are different number of types for iterator, TRIM_HORIZON starts from begininning
+after getting shard iterator get-records is used to get record out of it, if limit has been used then it gives the next shard iterator id to read more from it.(see following two commands)
+
+aws kinesis get-shard-iterator --stream-name test-stream --shard-iterator-type TRIM_HORIZON --shard-id shardId-000000000000 
+aws kinesis get-records --shard-iterator AAAAAAAAAAEC9y4iCV3MaXOxjkcfZviAfm9Vvd02nuB3jbebz9fCzvtB7PL/T5KNWI5ACP+E8xm87KCFqYe0bJz2NiVCoyFA7zbTHaorrnPVNNCw87WpP92m000NoW/6ttRl3CI5X9S2GM6NJV1Saob4HErKbjwdd0RRBnnI+HH+8ZAsbnQSV1LP1npG98NfR17T1svHVh8QD+gBgUL1baMtaujt2UBo
+
+
+Kinesis provides different methods to scale shards up and down
+- SplitShard
+-Merge Shards
+- UpdateShardCount (scale up and down to particular number

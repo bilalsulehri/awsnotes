@@ -1,0 +1,12 @@
+SWF
+A task coordination and state management service for cloud applications
+
+- Distributed
+- can scale up and down depending on task
+- works with on premises application or applications on cloud
+- workflow can consist of human events
+- workflow can last for 1 year
+- guarantee order of execution
+
+
+

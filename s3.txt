@@ -1,5 +1,35 @@
+S3 is oldest service in AWS, do read S3 FAQs before taking exam
+
 Create bucket options
 =======================
+limit: 100 buckets, contact amazon for more
+no limit on no. of objects in bucket
+
+bucket name : 3-63 characters
+
+--accessing bucket objects as normal objcts : s3.amazonaws.com/bucketname/object
+https://s3.amazonaws.com/sulehri.bucket/notes.txt
+
+
+--accessing bucket as static website , http://bucketname.s3-website-region.amazonaws.com
+
+http://sulehri.bucket.s3-website-us-east-1.amazonaws.com/index.html
+
+your s3 static website cannot refer pages from other buckets, and reason for it is cross domain permission
+you have to open permission of CORS (cross domain resource sharing ) in the bucket, from which pages are referred
+
+Important access rules
+======================
+
+If 'A' creates a bucket, he is owner and by default he has full permissions.
+If 'A' gives permission to other IAM user 'B' of same AWS Account, then whatever 'B' uploads, 'A' will still have permission on it. (oops, but whoever is paying for bucket is the supreme , he can do whatever, still need to revisit all these things)
+
+
+
+but if 'B' is cross account user, then 'B' becomes owner of that object and 'A' will not have permission on it by default
+
+
+
 
 When you create new bucket it's access is restricted by default.  you have to edit its public access settings and remove restrictions. 
 If you don't do so and try to give public access to objects inside bucket, it won't work.
@@ -9,14 +39,57 @@ successful upload of object returns http 200 code.
 
 once you enable versioning on bucket , you cannot disable it, you can suspend it though.
 
+we have meta data about objects you are storing.
+
+subresources
+	- Access control list
+	- Torrents
+
+	
+-S3 guarantees 99.99% availability and 99.999999999999% (11 9s) durability.
+
+s3 Features
+ - Tiered storage
+ - Lifecycle Management
+    you can move around your objects between different tiers, for example this file is 30 days old, move it from this tier to that tier.
+  - you can do encryption of your objects
+  -MFA Delete
+  
+  
+	
+
 Replication can be done only cross region , not in the same region.
 after replication configuration you have to copy already built in objects using cli commands
+
 afterwards uploading new versions automatically replicates, except deletion (for security reasons)
+
+Data consistency model
+If you write a new file and immediately read it, you will be able to view that data
+but if you delete or update an existing file and read it immediately, you may or may or may not get the updated file(might get older version).
+changes to objects take a little more time to propogate. this is also called eventual consistency
+
+Storage Classes (check comparison between availability matrix of these storage classes)
+- S3 Standard 99.99% availability, 99.99999999999% durability.
+   stored redundantly across multiple devices in multiple facilities and is designed to sustain loss of 2 facilities concurrently.
+-S3 IA (infrequently accessed)
+  for data that requires infrequent but rapid access. lower fee than s3, but charged a retrieval fee.
+-s3 one zone IA
+  same as previous but without multiple availability zones.
+-S3 Intelligent tiering 
+  based on machine learning designed to optimize cost by moving data to most cost effective tier , based on user experience.
+
+-S3 Glacier
+  least cost, for data archiving, retrieval time is from minutes to hours.
+  
+- S3 Glacier deep archive
+
+	cheapest than previous one, but retrieval time is 12 hours.
+	
 
 exam tips
 versioning must be enabled on source and destination buckets.
 regions must be unique
-files in existing bucket not replicated automatically, subsequent uploads do (exept any deletion may it be object or version).
+files in existing bucket not replicated automatically, subsequent uploads do (exept any deletion may it be object or version). (
 cannot replicate to multiple buckets
 
 s3 lifecycle and glacier notes
@@ -27,10 +100,85 @@ following things can be done
  - Archive to glacier storage class (30 days after IA if relevant)
  -Permanently delete
  
-CDN
+ 
+ 
+ 
+S3 charges
+You are charged on following basis
+- Storage : more you store more you charged
+- No. of Requests: mroe requests, mroe charge
+-Storage Management Pricing : for different tiers
+- DAta transfer pricing
+-Transfer Acceleration
+-Cross region replication
+
+Exam Tips
+- S3 is object-based , i.e, it allows you to upload files
+- file size range from 0 to 5tb
+-unlimited storage
+- file is stored in bucket
+- bucket is folder on cloudes, unique globally , attached a url with it.
+- Not suitable for os
+- successfull uploads generate http 200 response
+-MFA deletes
+- Key value
+-version id, 
+- meta data
+-sub resources (acl, torrent)
+- read after write consistency of put of new objects
+- storage classes S3 standard, S3 IA, S3 one Zone -IA, (reduced rundancy store) , s3 intelligent, s3 glacier, s3 glacier deep archive.
+
+
+
+ 
+Bucket policies work at bucket level
+ACcess control list goes down to object level
+
+Encryption in transit example, https encrypts in transit.
+Encryption at rest (server side)
+	- s3 managed keys-SSE-S3
+	- AWS Managed key service, you and aws manage keys together (KMS)
+	- Server side encryption with customer provided keys.
+encryption at rest (client side)
+    you encrypt your self and send to server.
+	
+	
+
+	
+Cross-Region replication
+========================
+
+it requires versioning enabled.
+deletion doesn't replicate
+existing files are not replicated, only new changes are replicated.
+delete markers are not replicated.	
+	
+
+S3 Transfer ACceleration
+========================
+arn:aws:s3:::sulehri.cross.test
+
+ 
+CDN (Cloud Front)
 ====
 
 Edge locations are where contents are cached.
 Edge locations are not read only, you can write objects on them too.
 Objects are cached for the life of TTL(Time to leave)
 
+Notes taken from quiz
+
+Until 2018 there was a hard limit on S3 puts of 100 PUTs per second. To achieve this care needed to be taken with the structure of the name Key to ensure parallel processing. As of July 2018 the limit was raised to 3500 and the need for the Key design was basically eliminated. Disk IOPS is not the issue with the problem. The account limit is not the issue with the problem.
+
+The key driver here is cost, so an awareness of cost is necessary to answer this. Full S3 is quite expensive at around $0.023 per GB for the lowest band. S3 standard IA is $0.0125 per GB, S3 One-Zone-IA is $0.01 per GB, and Legacy S3-RRS is around $0.024 per GB for the lowest band. Of the offered solutions SS3 One-Zone-IA is the cheapest suitable option. Glacier cannot be considered as it is not intended for direct access, however it comes in at around $0.004 per GB. Of course you spotted that RRS is being deprecated, and there is no such thing as S3 – Provisioned IOPS. In this case OneZone
+
+100 s3 buckets per accounts are available by default.
+
+should review
+Power User Access allows ________.
+You run a meme creation website where users can create memes and then download them for use on their own sites. The original images are stored in S3 and each meme's metadata in DynamoDB. You need to decide upon a low-cost storage option for the memes, themselves. If a meme object is unavailable or lost, a Lambda function will automatically recreate it using the original file from S3 and the metadata from DynamoDB. Which storage solution should you use to store the non-critical, easily reproducible memes in the most cost-effective way?
+What is the availability of S3 – OneZone-IA?
+One of your users is trying to upload a 7.5GB file to S3. However, they keep getting the following error message: "Your proposed upload exceeds the maximum allowed object size.". What solution to this problem does AWS recommend?
+You work for a major news network in Europe. They have just released a new mobile app that allows users to post their photos of newsworthy events in real-time, which are then reviewed by your editors before being copied to your website and made public. Your organization expects this app to grow very quickly, essentially doubling its user base each month. The app uses S3 to store the images, and you are expecting sudden and sizable increases in traffic to S3 when a major news event takes place (as users will be uploading large amounts of content.) You need to keep your storage costs to a minimum, and it does not matter if some objects are lost. With these factors in mind, which storage media should you use to keep costs as low as possible?
+You work for a busy digital marketing company who currently store their data on-premise. They are looking to migrate to AWS S3 and to store their data in buckets. Each bucket will be named after their individual customers, followed by a random series of letters and numbers. Once written to S3 the data is rarely changed, as it has already been sent to the end customer for them to use as they see fit. However, on some occasions, customers may need certain files updated quickly, and this may be for work that has been done months or even years ago. You would need to be able to access this data immediately to make changes in that case, but you must also keep your storage costs extremely low. The data is not easily reproducible if lost. Which S3 storage class should you choose to minimize costs and to maximize retrieval times?
+What is AWS Storage Gateway?

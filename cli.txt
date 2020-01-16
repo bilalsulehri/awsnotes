@@ -1,0 +1,24 @@
+CLI
+====
+
+practice 1.
+
+1. from console run aws configure
+provide acccess keys and IDs 
+2. you can check where your credentials are stored by:
+	cd ~
+	cd .aws
+	ls
+
+practice 2.
+aws ec2 describe-instances
+
+
+roles are better than installing credentials as explained in above examples.
+note : above dir .aws will not be created if credentials are not installed.
+
+
+aws ec2 run-instances --image-id ami-00068cd7555f543d5 --count 1 --instance-type t2.micro --key-name SulehriRootKP --security-group-ids sg-08de9a8e689d9ab09 --subnet-id subnet-a6c7d288
+
+
+

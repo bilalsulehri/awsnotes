@@ -1,0 +1,5 @@
+1. When message arrives in queue, it may or may not be visible to consumer, immediately, depending on the delay seconds attribute. It causes a delay for a number of seconds for message to be visible to consumer, message is in the queue, but not visible to consuer yet.
+
+Message can contain up to 256 KB of text
+
+SQS uses polling technique, which use pull mechanism. so it's pull based queuing mechanism , not push based

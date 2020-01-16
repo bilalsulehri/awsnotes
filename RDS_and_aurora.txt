@@ -1,0 +1,78 @@
+Aurora is compatible with MySql and postgresql, 5 times faster than mysql or 3 times faster than postgresql
+- distributed , fault tolerance, self healing storage system , that autoscales up to 64 TB using SSD per database cluster
+- IN order to get high availability advantage of Aurora, you need to set it up in Multi AZ
+- provisioned storage increases automatically with need
+- can have upto 15 read replicas
+- offers 99.99% availability
+- replicates to 6 copies accross 3 availability zones
+- backups are stored on s3
+-failover occurs in less than 30 seconds
+-since it's mysql and postgresql compatible, migration to them is easy.
+
+Why Aurora?
+- Relational databases are expensive
+-scaling options are usually vertical for RDBMS
+- you can take existing mysql and postgresql database and migrate it to aurora easily
+
+what Aurora Looks like?
+-It replicates across 3 AZ in 10GB chunks
+-it uses a shared storage volume, when chunks is written on that shared volume, it replicates each chunk, two times on each AZ
+  so it'll make 6 copies of each chunk in total
+-Aurora has 4/6 write quorum and 3/6 read quorum, which means that if 6 out of 4 nodes acknowledge the write operation, the write is considered stable, and remaining two are eventually also copied.  3/6 read means, if 3 out of 6 returns data, it's considered good.
+
+Limitations
+==========
+
+1. Aurora cluster volumes can grow up to 64 TB, need support ticket to raise limit
+2. provision upto 15 read replicas per cluster
+3. Largest Instance : 64 vCPU, 488 GB RAM, (db.r4.16xlarge)
+4. backtrack window can go back up to 72 hours
+5. compatible with my sql 5.6.10 , 5.7.12
+
+RDS
+===
+
+The basic building block of RDS is database instance and you can have multiple user databases inside an instance
+
+General Purpose SSD Storage stuff
+=================================
+range of sizes for different database engines
+
+-MariaDB, MySQL and PostgreSQL database instances: 20 GiB–64 TiB
+-SQL Server for Enterprise, Standard, Web, and Express editions: 20 GiB–16 TiB
+-Oracle instances: 20 GiB- 64 TiB
+
+baseline I/O performance of SSD storage is 3 IOPS for each GiB.
+similarly for 100GiB SSD, it'll be 300 IOPS
+for 1 TB (approx 1000 Gib) IOPS will be 3000 IOPS
+
+volumes below 1 Tib in size also have ability to burst to 3000 IOPS for extended period of time.
+Burst is not relevant for volumes over 1Tib, 
+
+When using general purpose SSD, your db instance get initial I/O Credit of 5.4 million (which is equal to 3000 IOPS for 30 minutes)
+
+Volumes earn I/O Credits at base performance that is 3IOPS per Gib
+When your storage usews fewer I/O than it earns in a second , then unused I/O Credits are added to I/O Credit balance.
+The max. I/O credit can go up to what initially is provided, that is , 5.4 million I/O Credits
+
+(The base performance level is the rate at which your storage earns I/O credits.) The more storage, the greater the base performance is and the faster it replenishes the I/O credit balance.
+
+Provisioned IOPS SSD Storage
+============================
+recommended for production, better work I/O constraint workloads. 
+
+range of sizes for different dbs
+
+PostGresql, mysql , maria, oralce : 100Gib to 80 TiB with 1000IOPS to 80000 IOPS
+SQL Server : 20 GiBs to 16 Tib with 1000 IOPS to 64000 IOPS (64k is guaranted on m5 instance types, others provide lower)
+
+
+Multi-AZ
+=========
+
+In a multi AZ deployment, Amazon RDS automatically provisions and maintains a standby replica in a different availablity zone.
+The primary db instance is synchronously replicated across  availability zones to provide data redundancy, eliminate io freezes and minimize latency spikes during system backup.
+
+note: high availability is not solution for scaling up in read only scenarios, you cannot use secondary instance for read only operation, for that purpose, use read replicas
+
+

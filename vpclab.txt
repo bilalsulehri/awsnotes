@@ -1,0 +1,28 @@
+created vpc with CIDR : 10.0.0.0/16
+created subnet 10.0.1.0/24 us-east-1a in above vpc
+created subnet 10.0.2.0/24 us-east-1b in above vpc
+created internet gateway in above vpc
+creatd a route table with following rule and associated it with 1a
+0.0.0.0/0 	target : internet gateway
+::/0	(ip6)
+
+for the public subnet, change the auto ip assigning setting to yes
+
+
+by doing this, now the subnet 1a is public and 1b is private.
+
+created two ec2s, one in public subnet and other in private
+and tried to install things on both
+
+in order to instance in private subnet to get access to internet, we add NAT instance or NAT gateway 
+and in the main route table, we add route entry for it.
+
+Eeach ec2 instance performs source and destination check by default. this means that instance must be source or destination of any traffic it receives. However, a NAT instance must be able to send and receive traffic, when the source or destination is not itself. therefore you must disable source/destination check on nat instance
+
+NAT instance should have http, https enabled in order for internet traffic 
+
+note: ephemeral port is short lived port for communication 	e.g. 1024-65535
+
+
+ 
+

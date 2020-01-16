@@ -4,23 +4,105 @@ Rate types
 on demand : allows you to pay fixed rate per hour or per second with no committment.
 Reserved : provides you with capacity reservation and offer a significant discount on the hourly charge for an instance.1-3 yrs tersm
 spot : enables you to bid whatever price you want for instance capacity, providing for even greater savings.
-dedicated hosts.
+dedicated hosts: Physical ec2 servers dedicated for your use, dedicated hosts help you reduce your costs by allowing you to use your existing software licenses.
+
+Use cases:
+On Demand : 
+- Users that want low cost and flexibility without any large upfront payment
+- Applications with short term , spiky and unpredictable loads, that cannot be interrupted.
+- Applications being developed and tested for Amazon for first time
+
+Reserved Pricing is useful for
+- Application with steady state and predictable usage.
+- Application that required reserved capacity.
+- Upfront payment , reduces overall costs 
+  Reserved pricing are of two types.
+	- Standard reserved instances
+		- 75% off on onDemand instances
+		- More payment upfront and longer contracts -> greater discounts
+	- Convertible reserved instances
+		- 54% off on demand, instance types can be converted to other instance types
+		 (AWS has many ec2 types, like with high cpu or high ram, with Standard, you cannot change type, but with convertible you can)
+	-Scheduled Reserved instances
+		- These are available to launch within the time window you reserve (for example 2 hours in morning). This option allows you to match your capacity reservation to predictable recurring schedule that only require a fraction of a day, week or month.
+	
 
 
 Termination protection is turned off by default, you must turn it on if you want protection.
 on an EBS backed instance the default action is to delete when instance is termninated.
-EBS root volumes of your default AMI's canot be encrypted, you can use third party tool or api.
-  additional volumes can be encrypted.
+
+Storage : For root we have options General purpose SSD, provisioned IOPS SSD, magnetic
+  for extended partition, we have additional choices of cold HDD and throughput optimized HDD.
+  
+	
+ root volumes of your default AMI's canot be encrypted, you can use third party tool or api. (Now in 2019 they can be encrypted)
+ EBS additional volumes can be encrypted.
   
   security group rules are stateful, if you change any inbound rule, it immediately affects.
+  
   all inbound traffic is blocked by default
   all outbound traffic is allowed by default
   changes to security group takes effect immediately
-  you can have any number of ec2 instances within a security group.
-you cannot block individual ips through security group, instead use network access control list
+  
+  you can have any number of ec2 instances within a security group. You assign security groups by selecting instance and go to actions->networking->change security groups
+you cannot block individual ips or ports through security group (because that's how it is designed, by default everything is blocked, you have to allow something). , instead use network access control list
 you can specify allow rules, not deny rules.
+
 
 storage volumes
 ==============
 
 ec2 instances and thier storage volume has to be in same availability zones, they cannot exist in different availability zones.
+
+
+exam tips
+- Termination protection is turned off by default
+- when instance is terminated, the by default setting for root to be automatically deleted is turned on but not for additional.
+- EBS root of your default AMI's can be encrypted.
+
+Exam tips of security groups
+-All inbound traffic is blocked by default
+-All output traffic is allowed. (even if you remove out bound rules in security group it won't take effect).
+-change to security group takes effect immediately
+- can have any number of instances in security groups and can have multipe secruity groups attached to ec2 instances.
+- security groups are statfull.
+	if you create inbound rule it's outbound is automatically allowed.
+	
+EBS (Elastic Block STore)
+=========================
+- is a virtual hard disk drive in a cloud.
+-Each amazon EBS volume is automatically replicated within its availability zone to protect you from component failure.
+
+Important notes on throughput and IOPS
+===============
+-Disk IOPS is the count of input/output operations per second
+-Throughput is data transfer rate (no. of bits input/output per second)
+Let's consider as the sample the 3000 IOPS and SQL database engine, the block size in terms of db engine is called the page size and for SQL Server it's equal to 8 KB. If you wish to calculate the actual throughput, if the IOPS defined, you will end up with the formula below:
+
+throughput = [IOPS] * [block size] = 3000 * 8 = 24 000 KB/s = 24 MB/s
+
+Types
+====
+1. General purpose SSD
+2. Provisioned IOPS (SSD)
+3. Throughput optimized HDD  (magnetic, physical , optimized for through put)
+4. Cold HDD (magnetic)
+5. Magnetic
+
+Snapshots are incremental and instance should be stopped 
+
+instance storage vs EBS
+instance cannot be stopped, if it stops for any reason, data is lost, while EBS is permanent
+instance store volumes are sometimes called ephemeral storage.
+-All AMIs are categorized either backed by EBS or instance store
+-For EBS Volume: the root device for instance launched from the AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
+-For instance store volumes: the root device for instance launchd from the AMI is an instance store volume created from a template stored in Amazon S3.
+
+
+notes
+=====
+elevate your permissions to root sudo su
+
+to copy something from your local computer to ec2 instance
+
+scp -i key.pem -r folder ubuntu@intanceip:/home/blah blah
