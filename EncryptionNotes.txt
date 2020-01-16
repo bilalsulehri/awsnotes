@@ -1,0 +1,47 @@
+Cipher is a system used to create an encoded or secret message
+
+A simple scenario (called ceaser cipher)
+
+A message has to be delivered , agreed upon rule is that each letter will be shifted 6 times, that is A=G
+shifting of character is the encryption, if the recipient has the key (A=G) he can decrypt the message
+CIA Triad, Confidentiality, Integrity(complete) and Availability.
+A good security plan incorporates all of CIA, example. Too much Availability will compromise confidentiality.
+
+
+Confidentilaity
+==============
+- File encryption
+-Message encryption
+- Link encryption
+
+Integrity
+===========
+
+Hashes and Digital signatures is used to help verify message and its origin or to detect corruption in file.
+stronger encryption will take longer time to encrypt/decrypt message and could affect integrity 
+
+Availability
+============
+
+
+Symmetric cryptography
+it uses the same key to encrypt and decrypt the message (example ceaser chipher, both encryption and decryption process has to know that A=G
+
+Assymetric cryptography
+
+It uses two different keys, one for encryption and other for decryption.
+
+
+A is sender and B is reciever.
+A will encryption B's public key to encrypt /cipher his message and send to B.
+B will use its private key to decrypt/decipher the message
+
+
+
+
+
+
+
+
+
+Ceaser Cipher : 

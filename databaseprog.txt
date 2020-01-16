@@ -1,0 +1,52 @@
+import json
+import boto3
+import decimal
+
+dynamodb=boto3.resource("dynamodb")
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self,o):
+        if isinstance(o,decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
+
+def result(status, message):
+    return{
+        'statusCode':status,
+        'body':message,
+        'headers':{
+            'Content-Type':'application/json'
+        }
+    }
+def lambda_handler(event, context):
+    table=dynamodb.Table("invebntory")
+    print(json.dumps(event))
+    
+    itemid=event['pathParameters']['itemid']
+    if(event['httpMethod']=='GET'):
+        response=table.get_item(Key={'product_id': itemid})
+        #print(json.dumps(event))
+        if('Item' in response):
+            item=response['Item']
+        else:
+            return result(400,'Item not found')
+    else:
+        callBody=json.loads(event['body'])
+        newQuantity=callBody['newQuantity']
+        response=table.update_item(
+            Key={
+                'product_id':itemid
+            },
+            UpdateExpression='set quantity=:q',
+            ExpressionAttributeValues={
+                ':q':int(newQuantity)
+            },
+            ReturnValues="ALL_NEW"
+        )
+        item=response['Attributes']
+        
+    item['quantity']=int(item['quantity'])
+    
+    return result(200, json.dumps(item, cls=DecimalEncoder))
+   
+    

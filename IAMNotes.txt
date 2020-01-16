@@ -1,0 +1,24 @@
+-IAM supports PCI DSS
+-Policy are permissions ,documents are JSON formatted.
+-Anything you create on IAM, it's on global region basis, it's not for any particular region
+
+-Should create Multi factor 
+
+what's SAML
+Using SAML (Security Assertion Markup Language 2.0), you can give your federated users single sign-on (SSO) access to the AWS Management Console.
+
+AWS follows least privilige scheme, which means user created have no access, and for example s3 bucket have no public access
+
+Power user have access to all aws service except the management of groups and users within IAM
+
+when we create user, by default no permission is given to user it's called non-explicit deny
+
+best practice is to create an IAM user and login through it for daily work, and not use the root user
+
+pricipal of least priviledge should be practiced while creating iam users
+
+Policies
+two kinds, explicit allow and explicit deny
+explicit deny always overrides explicit allows
+
+Roles are used for services, because policies cannot be attached to services
